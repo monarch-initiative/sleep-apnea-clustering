@@ -90,4 +90,10 @@ assertthat::has_name(shhs1, cols_sq)
 #look at data dict for rows to remove
 #verify cols are in there
 #remove cols from tibble
+#what to do with categorical variables
+#find distance measure
 
+ggplot(data=shhs2.pruned, aes(x=pptid, y=rdi0ps))+
+  geom_point(alpha=.4, size=1, color="#880011")
+
+library(cluster)
