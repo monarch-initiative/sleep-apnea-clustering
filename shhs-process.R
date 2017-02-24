@@ -39,14 +39,23 @@ shhs2<-read_csv("shhs2-dataset-0.11.0.csv")
 datadict<-read_csv("shhs-data-dictionary-0.11.0-variables.csv")
 
 #process
-shhs1.lower<-colsToLower(shhs1)
-terms_admin<-pullTermsToRemove(datadict, shhs1.lower, "Administrative")
-shhs1.noadmin<-removeCols(shhs1.lower, terms_admin)
-terms_nosq<-pullTermsToRemove(datadict, shhs1.noadmin, "Signal Quality")
-shhs1.nosq<-removeCols(shhs1.noadmin, terms_nosq)
+pruneSHHS<-function (dataset, ddict){
+  shhs.lower<-colsToLower(dataset)
+  terms_admin<-pullTermsToRemove(ddict, shhs.lower, "Administrative")
+  shhs.noadmin<-removeCols(shhs.lower, terms_admin)
+  terms_nosq<-pullTermsToRemove(ddict, shhs.noadmin, "Signal Quality")
+  shhs.nosq<-removeCols(shhs.noadmin, terms_nosq)
+  
+  drop.cols<-c("pm217", "pm227", "ecgdate")
+  dataset.pruned<-removeCols(shhs.nosq, drop.cols)
+  return (dataset.pruned)
+}
 
-drop.cols<-c("pm217", "pm227", "ecgdate")
-shhs1.noadmin<-removeCols(shhs1.nosq, drop.cols)
+shhs1.pruned<-pruneSHHS(shhs1, datadict)
+shhs2.pruned<-pruneSHHS(shhs2, datadict)
+
+
+
 
 
 
