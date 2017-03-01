@@ -10,9 +10,14 @@ colsToLower <- function(df) {
   return(df)
 }
 
-pullTermsToRemove <-function(ddict, dataset, string){
-  category_tibble<-ddict %>%
-    filter(str_detect(folder, string))
+
+pullTerms <-function(category_tibble, dataset){
+  #if (is.name(substitute(cat_str))){
+  #  cat=deparse(substitute(cat_str))
+  #}
+  #else{
+  #    cat=cat_str
+  #}
   
   terms_to_remove<-pull(category_tibble, id)
   pulled_cols<-filter(category_tibble, assertthat::has_name(dataset, terms_to_remove)) %>%
@@ -21,13 +26,18 @@ pullTermsToRemove <-function(ddict, dataset, string){
     .[["id"]]
   
   return (pulled_cols)
-
-}
+  }
 
 removeCols<-function(dataset, cols_to_remove){
   dataset.cols.removed<-dataset %>%
     select(-one_of(cols_to_remove))
   return (dataset.cols.removed)
+}
+
+subsetCols<-function(dataset, cols_to_subset){
+  dataset.cols.subsetted<-dataset %>%
+    select(one_of(cols_to_subset))
+  return(dataset.cols.subsetted)
 }
 
 
@@ -41,7 +51,7 @@ datadict<-read_csv("shhs-data-dictionary-0.11.0-variables.csv")
 #process
 pruneSHHS<-function (dataset, ddict){
   shhs.lower<-colsToLower(dataset)
-  terms_admin<-pullTermsToRemove(ddict, shhs.lower, "Administrative")
+  terms_admin<-pullTerms(ddict, shhs.lower, "Administrative")
   shhs.noadmin<-removeCols(shhs.lower, terms_admin)
   terms_nosq<-pullTermsToRemove(ddict, shhs.noadmin, "Signal Quality")
   shhs.nosq<-removeCols(shhs.noadmin, terms_nosq)
