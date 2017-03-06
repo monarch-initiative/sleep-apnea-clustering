@@ -88,3 +88,34 @@ with(dune.env, as.numeric(Moisture))
 anova(lm(Moist ~ cl))
 anova(rda(Moist ~  cl))
 with(dune.env, table(cl, Management))
+
+library(labdsv)
+const(dune, cl)
+importance(dune, cl)
+
+mod <- indval(dune, as.numeric(cl))
+names(mod)
+
+mod$maxcls
+mod$pval
+summary(mod)
+
+summary(mod, type = "long")
+
+ckm <- kmeans(decostand(dune, "hell"), 3)
+ckm$cluster
+
+ordiplot(ord, dis="si")
+ordihull(ord, ckm$cluster, col="red")
+
+ccas <- cascadeKM(decostand(dune, "hell"), 2, 15)
+plot(ccas, sortq=TRUE)
+
+library(cluster)
+cfuz <- fanny(d, 3, memb.exp=1.7)
+names(cfuz)
+
+ordiplot(ord, dis="si")
+ordiplot(ord, dis="si", type="n")
+stars(cfuz$membership, locatio=ord, draw.segm=TRUE, add=TRUE, scale=FALSE, len=0.1)
+ordihull(ord, cfuz$clustering, col="blue")
