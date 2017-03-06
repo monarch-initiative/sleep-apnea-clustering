@@ -97,3 +97,36 @@ ggplot(data=shhs2.pruned, aes(x=pptid, y=rdi0ps))+
   geom_point(alpha=.4, size=1, color="#880011")
 
 library(cluster)
+
+shhs2.pruned %>%
+  select(matches('^pm212.|pm220..'))
+
+shhs1.pruned %>%
+  select(-matches('^dias.20'))
+
+psg_hr<-pullTerms(datadict, shhs1.pruned, "Heart Rate")
+psg_hr<-c(psg_hr, "obf_pptid") #add in id column
+cols.psg_hr<-subsetCols(shhs1.pruned, psg_hr)
+glimpse(cols.psg_hr)
+
+avg_psg_hr<-pullTerms(datadict, cols.psg_hr, "display_name", "Average")
+
+#cols.id<-shhs1.pruned%>%select(obf_pptid)
+#left_join(cols.id, cols.psg_hr, by='obf_pptid')
+
+head(cars)
+ggplot(data=cols.psg_hr, aes(x=obf_pptid, y=savbnbh))+
+  geom_point(alpha=.4, size=1, color="#880011")
+
+catibble<-datadict %>% 
+  filter(str_detect(folder, "Heart Rate")) %>%
+  filter(str_detect(display_name, "Average"))
+
+psg_hr<-pullTerms(catibble, shhs1.pruned)
+psg_hr<-c(psg_hr, "obf_pptid") #add in id column
+
+clusters_psg_hr.pam<-pam(na.omit(cols.psg_hr %>% select(-obf_pptid)), 3, FALSE, "euclidean")
+clusters_psg_hr.hclust<-hclust(na.omit(cols.psg_hr))
+
+summarize_each(na.omit(cols.psg_hr), funs(mean))
+summarize(na.omit(cols.psg_hr), count.avghrwarousnrem=sum(aavbnbh>69))
