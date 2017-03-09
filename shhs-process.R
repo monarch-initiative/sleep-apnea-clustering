@@ -8,6 +8,7 @@ source("lib/removeCols.R")
 source("lib/subsetCols.R")
 source("lib/pullTerms.R")
 source("lib/pruneSHHS.R")
+source("lib/lookUpFolderWithString.R")
 
 
 #load data
