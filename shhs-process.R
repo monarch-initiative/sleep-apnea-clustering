@@ -9,6 +9,7 @@ source("lib/subsetCols.R")
 source("lib/pullTerms.R")
 source("lib/pruneSHHS.R")
 source("lib/lookUpFolderWithString.R")
+source("lib/lookUpDispname.R")
 
 
 #load data
