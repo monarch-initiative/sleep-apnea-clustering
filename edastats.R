@@ -1,4 +1,16 @@
 
+df.anthro <-basicSubset(datadict, shhs1.pruned, "Anthropometry")
+df.anthro.cat<-df.anthro %>% mutate(bmicat = cut(bmi_s1, 
+                                  breaks=c(0, 18.5, 25, 30, Inf),
+                                  labels=c("underweight", "normal", "overweight", 
+                                           "obese"),
+                                  #include.lowest=TRUE, 
+                                  right=TRUE))
+ljoined<-left_join(df.anthro.cat, df.oxysat)
+qplot(x=Var1, y=Var2, data=melt(cor(df.anthro)), fill=value, geom="tile")
+df.select<-ljoined %>% select(bmicat, avdrop5)
+ggplot(ljoined, aes(y=avdnbp5, x=bmicat))+geom_boxplot()
+ggplot(df.anthro.cat, aes(y=neck20, x=bmicat))+geom_boxplot()
 
 df.bp <- lookUpFolderWithString(datadict, "Blood Pressure")
 terms_bp<-pullTerms(df.bp, shhs1.pruned)
@@ -32,6 +44,9 @@ library(gmodels)
 CrossTable(shhs1.ecg.fct$afib, shhs1.ecg.fct$apbs, prop.t=TRUE, prop.r=FALSE, 
            prop.c=FALSE, fisher=TRUE)
 #chisq=TRUE
+
+CrossTable(joined.demo.anthro[,2], joined.demo.anthro[,3], prop.t=TRUE, 
+           prop.r=FALSE, prop.c=FALSE, chisq=TRUE)
 
 library(Hmisc)
 describe(mydata)
@@ -83,3 +98,64 @@ max_terms<-lookUpDispnameWithString(datadict, "Maximum")
 terms_to_drop<-pullTerms(max_terms, df.hr.nomin)
 df.hr.nomax<-removeCols(df.hr.nomin, terms_to_drop)
 threepercent<-lookUpDispnameWithString(datadict, "3%")
+terms_3pc<-pullTerms(threepercent, df.hr.nomax)
+df.hr.3pc<-subsetCols(df.hr.nomax, terms_3pc)
+
+df.medalert<-basicSubset(datadict, shhs1.pruned, "Medical Alert")
+
+df.oxysat<-basicSubset(datadict, shhs1.pruned, "Oxygen Saturation")
+lookUpDispname(datadict, "arousals")
+
+df.resp<-basicSubset(datadict, shhs1.pruned, "Respiratory Events")
+lookUpFolderWithString(datadict, "Indexes")
+
+df.anthro.cat$hip[2716]=110.4
+ggplot(df.anthro %>% 
+         select(-obf_pptid, -bmi_s1, -weight, -weight20))+geom_boxplot()
+ggplot(df.anthro.cat, aes(y=neck20, x=bmicat))+geom_boxplot()
+ggplot(df.anthro.cat, aes(y=hip, x=bmicat))+geom_boxplot()
+ggplot(df.anthro.cat, aes(y=waist, x=bmicat))+geom_boxplot()
+ggplot(data=df.anthro, aes(x=bmi_s1, y=waist))+geom_point()
+ggplot(data=df.anthro, aes(x=bmi_s1, y=hip))+geom_point()
+ggplot(data=df.anthro, aes(x=bmi_s1, y=neck20))+geom_point()
+
+library(reshape2)
+melted<-melt(cor(na.omit(df.anthro%>%select(-obf_pptid))))
+qplot(x=Var1, y=Var2, data=melted, fill=value, geom="tile")
+qplot(x=Var1, y=Var2, data=melted, fill=value, geom="tile") +
+  scale_fill_gradient2(limits=c(-1, 1))
+
+melted <- melt(cor(na.omit(shhs1.avg.noarous%>%select(-obf_pptid))))
+
+boxplot(df.anthro %>% select (-obf_pptid, -height, -hip, -neck20, -waist, -bmi_s1))
+
+df.demo<-basicSubset(datadict, shhs1.pruned, "Demographics")
+joined.demo.anthro<-left_join(df.demo, df.anthro.cat)
+
+sampledat<-joined.demo.anthro %>% 
+  group_by(age_category_s1, bmicat) %>%
+  summarize(count=n())
+
+sampledat<-joined.demo.anthro %>%
+  group_by(bmicat, age_category_s1) %>%
+  summarize(count=n())
+
+ggplot(data=sampledat, aes(y=count, x=as.factor(age_category_s1), 
+                           fill=bmicat))+geom_bar(stat="identity", 
+                                                  position=position_dodge())
+
+sampledat<-joined.demo.anthro %>%
+#  select(gender, race, bmi_s1) %>%
+  group_by(gender, race)
+
+ggplot(data=sampledat, aes(y=neck20, x=as.factor(gender), 
+                           fill=as.factor(race))) + geom_boxplot()
+
+CrossTable(joined.demo.anthro$gender, joined.demo.anthro$bmicat, chisq=TRUE)
+
+
+
+df.sleephabit <-basicSubset(datadict, shhs1.pruned, "Sleep Habits")
+cola=df.sleephabit[,2]
+colb=df.sleephabit[,4]
+CrossTable(cola, colb, chisq=TRUE)
