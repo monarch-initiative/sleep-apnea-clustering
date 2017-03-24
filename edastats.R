@@ -1,11 +1,4 @@
 
-df.anthro <-basicSubset(datadict, shhs1.pruned, "Anthropometry")
-df.anthro.cat<-df.anthro %>% mutate(bmicat = cut(bmi_s1, 
-                                  breaks=c(0, 18.5, 25, 30, Inf),
-                                  labels=c("underweight", "normal", "overweight", 
-                                           "obese"),
-                                  #include.lowest=TRUE, 
-                                  right=TRUE))
 ljoined<-left_join(df.anthro.cat, df.oxysat)
 qplot(x=Var1, y=Var2, data=melt(cor(df.anthro)), fill=value, geom="tile")
 df.select<-ljoined %>% select(bmicat, avdrop5)
@@ -156,6 +149,218 @@ CrossTable(joined.demo.anthro$gender, joined.demo.anthro$bmicat, chisq=TRUE)
 
 
 df.sleephabit <-basicSubset(datadict, shhs1.pruned, "Sleep Habits")
-cola=df.sleephabit[,2]
-colb=df.sleephabit[,4]
-CrossTable(cola, colb, chisq=TRUE)
+dim(df.sleephabit)
+
+mat.sleephabit=df.sleephabit %>%
+  select(-obf_pptid, -starts_with("hrs"), -starts_with("mi"), -naps02, -starts_with("tfaw"), 
+         -starts_with("twuw"), -starts_with("yrs")) %>%
+  as.matrix()
+colb=df.sleephabit %>% pull(2)
+cola=df.sleephabit %>% pull(3)
+
+
+for (i in 1:(dim(mat.sleephabit)[2]-1)){
+  for (j in 2:dim(mat.sleephabit)[2]){
+    if (i<j){
+      cola=mat.sleephabit[,i]
+      colb=mat.sleephabit[,j]
+      out<- capture.output(CrossTable(cola, colb, chisq=TRUE))
+      cat(colnames(mat.sleephabit)[i], " x ", colnames(mat.sleephabit)[j], out,
+          file="crosstabs-sleephabit.txt", sep="\n", append=TRUE)
+      #print (colnames(mat.sleephabit)[i])
+      #print (colnames(mat.sleephabit)[j])
+    }
+  }
+}
+
+#summary
+df.sleephabit %>%
+  select(-obf_pptid, -starts_with("hrs"), -starts_with("mi"), -naps02, 
+         -starts_with("tfaw"), -starts_with("twuw"), -starts_with("yrs")) %>%
+  mutate_each(funs(factor)) %>%
+  summary
+
+sleephab.num<-df.sleephabit %>%
+  select(starts_with("hrs"), starts_with("mi"), naps02, 
+         starts_with("yrs"), 
+         -obf_pptid)
+summary(sleephab.num)
+boxplot(sleephab.num)
+cor(na.omit(sleephab.num))
+
+noyes.tab<-lookUpDomain(datadict, "yes")
+terms_noyes<-pullTerms(noyes.tab, df.sleephabit)
+df.sleephabit.noyes<-subsetCols(df.sleephabit, terms_noyes)
+catCrossTabs(df.sleephabit.noyes, "crosstabs-sleephab-noyes.txt")
+
+df.sleephab.no<-removeCols(df.sleephabit, terms_noyes)
+df.sleephab.no %>%
+  select(-starts_with("hrs"), -starts_with("mi"), -naps02, 
+         -starts_with("tfaw"), -starts_with("twuw"), -starts_with("yrs")) %>%
+  na.omit %>%
+  cor(method="spearman")
+
+melted<-df.sleephab.no %>%
+  select(-obf_pptid, -starts_with("tfaw"), -starts_with("twuw"),-starts_with("mi")) %>%
+  na.omit %>%
+  cor (method="spearman") %>%
+  melt
+
+#tidysf36 <- sf36.grped %>%
+#  gather(key, value, -gender, -race)
+qplot(x=Var1, y=Var2, data=melted, fill=value, geom="tile") +
+  scale_fill_gradient2(limits=c(-1, 1))
+joined.demo.anthro.sf36<-left_join(joined.demo.anthro, df.sf36)
+out <- capture.output(summary(my_very_time_consuming_regression))
+
+cat("My title", out, file="summary_of_my_very_time_consuming_regression.txt", 
+    sep="n", append=TRUE)
+cola<-sapply(df.sleephabit, pull((2:dim(df.sleephabit)[2])))
+
+df.sf36<-basicSubset(datadict, shhs1.pruned, "SF-36")
+summary(df.sf36)
+boxplot(df.sf36 %>%
+          select(starts_with("raw"), -obf_pptid))
+
+ggplot(joined.demo.anthro.sf36, aes(y=bp_s1, x=bmi_s1)) +
+  geom_point(shape=1) +    # Use hollow circles
+  geom_smooth(method=lm,   # Add linear regression line
+              se=FALSE)
+
+sf36.grped<-joined.demo.anthro.sf36 %>%
+  group_by(gender, race) %>%
+  select(one_of(sf36.scores)) 
+
+sf36.scores<-df.sf36 %>%
+  select(-starts_with("raw"), -obf_pptid) %>%
+  colnames
+
+
+tidysf36 <- sf36.grped %>%
+  gather(key, value, -gender, -race)
+
+ggplot(tidysf36, aes(y=value, 
+                x=as.factor(gender), 
+                fill=as.factor(race))) + geom_boxplot() + facet_wrap(~key)
+
+df.med<-basicSubset(datadict, shhs1.pruned, "Medications")
+
+df.med %>%
+  select(-obf_pptid) %>%
+  mutate_each(funs(factor)) %>%
+  summary
+
+mat.med=df.med %>%
+  select(-obf_pptid) %>%
+  as.matrix()
+
+for (i in 1:(dim(mat.med)[2]-1)){
+  for (j in 2:dim(mat.med)[2]){
+    if (i<j){
+      cola=mat.med[,i]
+      colb=mat.med[,j]
+      out<- capture.output(CrossTable(cola, colb, chisq=TRUE))
+      cat(colnames(mat.med)[i], " x ", colnames(mat.med)[j], out,
+          file="crosstabs-meds.txt", sep="\n", append=TRUE)
+      #print (colnames(mat.sleephabit)[i])
+      #print (colnames(mat.sleephabit)[j])
+    }
+  }
+}
+
+df.qual <- basicSubset (datadict, shhs1.pruned, "Quality Of Life")
+catCrossTabs(df.qual.yes, "crosstabs-qual-yesno.txt")
+
+terms.noyes.qual<-pullTerms(noyes.tab, df.qual)
+df.qual.yes<-subsetCols(df.qual, terms.noyes.qual)
+df.qual.num<-removeCols(df.qual, terms.noyes.qual)
+
+melted<-df.qual.num %>%
+  select(-obf_pptid) %>% #, -starts_with("tfaw"), -starts_with("twuw"),-starts_with("mi")) %>%
+  na.omit %>%
+  cor (method="spearman") %>%
+  melt
+
+qplot(x=Var1, y=Var2, data=melted, fill=value, geom="tile") +
+  scale_fill_gradient2(limits=c(-1, 1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+df.medhist <- basicSubset(datadict, shhs1.pruned, "Medical History")
+df.medhist.num<-df.medhist %>% 
+  select(which(sapply(.,is.double)))
+cor(na.omit(df.medhist.num))
+
+df.medhist.cat<-df.medhist %>% 
+  select(-which(sapply(.,is.double)))
+
+catCrossTabs(df.medhist.cat, "crosstabs-medhist.txt")
+
+df.adverse <- basicSubset(datadict, shhs1.pruned, "Adverse Events")
+df.adverse %>%
+  select(-obf_pptid) %>%
+  mutate_each(funs(factor)) %>%
+  summary
+
+df.adverse.no0<-df.adverse %>%
+  select(-imhihrae, -imlohrae, -imosatae, -urosatae)
+
+catCrossTabs(df.adverse.no0, "crosstabs-adverse.txt")
+
+df.ess<- basicSubset(datadict, shhs1.pruned, "Epworth Sleepiness Scale")
+
+df.ess %>% select (-obf_pptid) %>% na.omit %>% cor(method="spearman")
+
+df.morning <- basicSubset(datadict, shhs1.pruned, "Morning Survey")
+
+#diffa10, meds10
+df.morning %>% 
+  select(-diffa10, -meds10, -obf_pptid) %>%
+  na.omit %>%
+  cor(method="spearman")
+
+summary(df.morning)
+
+df.health <- basicSubset(datadict, shhs1.pruned, "Health Interview")
+
+#asa15, evsmok15, nitro15, ns1yr15, slpill15, smknow15, 
+
+df.health %>%
+  select(-obf_pptid, -asa15, -evsmok15, -nitro15, -ns1yr15, -slpill15, 
+         -smknow15) %>%
+  na.omit %>%
+  cor(method="spearman")
+
+df.health.yesno<-df.health %>%
+  select(obf_pptid, asa15, evsmok15, nitro15, ns1yr15, slpill15, smknow15)
+
+catCrossTabs(df.health.yesno, "crosstabs-healthint.txt")
+
+df.sleeparch<-basicSubset(datadict, shhs1.pruned, "Sleep Architecture")
+#stage shifts, minutes, percent, latencygrade (domain)
+stagesh.tab<-lookUpUnits(datadict, "stage shifts")
+terms_stagesh<-pullTerms(stagesh.tab, df.sleeparch)
+minutes.tab<-lookUpUnits(datadict, "minutes")
+terms_minutes<-pullTerms(minutes.tab, df.sleeparch)
+df.sa.stagesh<-subsetCols(df.sleeparch, terms_stagesh)
+df.sa.min<-subsetCols(df.sleeparch, terms_minutes)
+
+minutes_corr<-corrNASpear(df.sa.min %>% select(-slptime))
+melted<-melt(minutes_corr)
+melteddesc<-melted %>%
+  arrange(desc(value)) %>%
+  filter(abs(value)>.5)
+qplot(x=Var1, y=Var2, data=melteddesc, fill=value, geom="tile") +
+  scale_fill_gradient2(limits=c(-1, 1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+#assocstats in vcd package Cramer's V
+#ICC in psych package or ICC package
+#eta (sqrt of eta squared) from ANOVA
+
+model <- lm(waist ~ bmicat, data=na.omit(df.anthro.cat))
+rsq<-summary(model)$r.squared
+sqrt(rsq)
+boxplot(waist ~ bmicat, na.omit(df.anthro.cat))
+
+library(psych)
+library(vcd)
