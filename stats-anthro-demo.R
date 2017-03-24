@@ -47,3 +47,21 @@ ggplot(data=sampledat, aes(y=neck20, x=as.factor(gender),
                            fill=as.factor(race))) + geom_boxplot()
 
 CrossTable(joined.demo.anthro$gender, joined.demo.anthro$bmicat, chisq=TRUE)
+
+sampledat<-joined.demo.anthro %>%
+  group_by(age_category_s1)
+
+ggplot(data=sampledat, aes(y=neck20, 
+                           x=as.factor(age_category_s1))) + geom_boxplot()
+
+ggplot(data=joined.demo.anthro, aes(y=bmi_s1, x=age_s1)) + geom_point()
+
+sampledat<-joined.demo.anthro %>%
+  group_by(race, ethnicity)
+
+ggplot(data=sampledata, aes(y=neck20, x=as.factor(race), 
+                            fill=as.factor(ethnicity))) + geom_boxplot()
+
+joined.demo.anthro %>%
+  + group_by(race, ethnicity) %>%
+  + summarize(count=n())
