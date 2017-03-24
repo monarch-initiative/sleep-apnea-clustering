@@ -103,4 +103,30 @@ qplot(x=Var1, y=Var2, data=melted, fill=value, geom="tile") +
   scale_fill_gradient2(limits=c(-1, 1))
 
 sampledata<-joined.demo.anthro.oxysat %>%
-  select(age_s1, bmi_s1, neck20, hip, waist, starts_with("avdn"), starts_with("sao2"))
+  select(age_s1, bmi_s1, neck20, hip, waist, starts_with("avdn"), 
+         starts_with("sao2"))
+
+# example data
+set.seed(1)
+DF <- data.frame(x=sample(c("Y","N"),100,T),y=sample(c("Y","N"),100,T))
+
+# how to get correlation
+DF[] <- lapply(DF,as.integer)
+cor(DF)
+#            x          y
+# x  1.0000000 -0.0369479
+# y -0.0369479  1.0000000
+
+# visualize it
+library(corrplot)
+corrplot(cor(DF))
+
+DF <- data.frame(v1 = sample(c("Y","N"), 100, T),
+                 v2 = sample(c("Y","N"), 100, T),
+                 v3 = sample(c("Y","N"), 100, T),
+                 v4 = sample(c("Y","N"), 100, T),
+                 v5 = sample(c("Y","N"), 100, T))
+DF[] <- lapply(DF,as.integer)
+library(sjPlot)
+sjp.corr(DF)
+sjt.corr(DF)
