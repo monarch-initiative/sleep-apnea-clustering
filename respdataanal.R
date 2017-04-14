@@ -4,6 +4,7 @@
 # Obstructive Apnea
 # Hypopnea
 
+df.resp <- basicSubset(datadict, shhs1.pruned, "Respiratory Events")
 df.oxysat <- basicSubset(datadict, shhs1.pruned, "Oxygen Saturation")
 df.centap <-basicSubset(datadict, shhs1.pruned, "Central")
 df.obap <-basicSubset(datadict, shhs1.pruned, "Obstructive")
@@ -11,6 +12,15 @@ df.hypop <-basicSubset(datadict, shhs1.pruned, "Hypopnea")
 df.hr <- basicSubset(datadict, shhs1.pruned, "Heart Rate")
 df.arousal <-basicSubset(datadict, shhs1.pruned, "Arousals")
 df.index <-basicSubset(datadict, shhs1.pruned, "Indexes")
+df.index2 <-basicSubset(datadict, shhs2.pruned, "Indexes")
+
+joined.index<-left_join(df.index, df.index2, by="obf_pptid")
+corr.index<-corrNASpear(joined.index)
+p<-plotMeltedCorr(corr.index, "cont")
+joined.index %>%
+  select(starts_with("ahi")) %>%
+  summary
+  boxplot
 
 shhs1.avg.noarous %>%
   select(-obf_pptid) %>%
