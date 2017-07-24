@@ -19,6 +19,9 @@ Currently, these scripts are intended to be run in a certain order. We are worki
   Find factor loadings for certain number of factors (change this).
   Plots factor plot and factor diagram.
   
-#### 4. prettyparallel
+#### 3a. prettyparallel
+  Function for plotting scree plot/parallel analysis in a nice, publication-worthy way.
+  
+
   
 
