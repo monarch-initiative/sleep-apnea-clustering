@@ -4,10 +4,11 @@ This repository aims to be a pipeline for processing the Sleep Heart Health Stud
 
 Currently, these scripts are intended to be run in a certain order. We are working on combining everything into one package, but to replicate the analysis done in my thesis, it is best to run the scripts.
 
-###1. shhs-process
+### 1. shhs-process
   Loads data into R workspace. The key files are a data csv and a datadict csv (the dictionary of all the variables). 
   Note: You need to adjust file pointers to point to the directories where the files are located.
-###2. workingSHHS1
+
+### 2. workingSHHS1
   Subsets the data from shhs1-data.csv, cleans the data (recoding binary vars as factors, fixing data entry errors, etc.) and builds a data frame of relevant features.
   workingcvd, workinginterim, workingSHHS2 all do the same thing for those respective datasets.
   
