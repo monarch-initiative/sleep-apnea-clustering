@@ -12,7 +12,13 @@ Currently, these scripts are intended to be run in a certain order. We are worki
   Subsets the data from shhs1-data.csv, cleans the data (recoding binary vars as factors, fixing data entry errors, etc.) and builds a data frame of relevant features.
   workingcvd, workinginterim, workingSHHS2 all do the same thing for those respective datasets.
   
-###3. factoranal
-  Input: data frame from workingSHHS1
+### 3. factoranal
+  Input: data frame from workingSHHS1 (df)
+  Calculates a heterochoric correlation for df, plots correlation heatmap
+  Finds ideal number of factors through parallel analysis and VSS.
+  Find factor loadings for certain number of factors (change this).
+  Plots factor plot and factor diagram.
+  
+#### 4. prettyparallel
   
 
