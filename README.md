@@ -9,8 +9,8 @@ Currently, these scripts are intended to be run in a certain order. We are worki
   Note: You need to adjust file pointers to point to the directories where the files are located.
 
 ### 2. workingSHHS1
-  Subsets the data from shhs1-data.csv, cleans the data (recoding binary vars as factors, fixing data entry errors, etc.) and builds a data frame of relevant columns.
-  workingcvd, workinginterim, workingSHHS2 all do the same thing for those respective datasets.
+  * Subsets the data from shhs1-data.csv, cleans the data (recoding binary vars as factors, fixing data entry errors, etc.) and builds a data frame of relevant columns.
+  * workingcvd, workinginterim, workingSHHS2 all do the same thing for those respective datasets.
   
 ### 3. factoranal
   Input: data frame from workingSHHS1 (df)
