@@ -13,11 +13,11 @@ Currently, these scripts are intended to be run in a certain order. We are worki
   * workingcvd, workinginterim, workingSHHS2 all do the same thing for those respective datasets.
   
 ### 3. factoranal
-  Input: data frame from workingSHHS1 (df)
-  Calculates a heterochoric correlation (hc) for df, plots correlation heatmap
-  Finds ideal number of factors through parallel analysis and VSS.
-  Find factor loadings for certain number of factors (change this).
-  Plots factor plot and factor diagram.
+  * Input: data frame from workingSHHS1 (df)
+  * Calculates a heterochoric correlation (hc) for df, plots correlation heatmap
+  * Finds ideal number of factors through parallel analysis and VSS.
+  * Find factor loadings for n factors.
+  * Plots factor plot and factor diagram.
   
 At this point, one would go back and select only the columns they want in df (that is, the important factors).
   
@@ -28,9 +28,9 @@ At this point, one would go back and select only the columns they want in df (th
   Calculates Gower distance matrix for hc.
   
 ### 5. plotinternalmetric
-  Calculates clusterings for hclust (many linkage method options), diana, and pam.
-  Calculates connectivity, Dunn index, silhouette width for each of those clusterings, with cuts from 2-10.
-  Plots a line graph for connectivity, Dunn, silhouette vs. number of clusters (for different clusterings)
+  * Calculates clusterings for hclust (many linkage method options), diana, and pam.
+  * Calculates connectivity, Dunn index, silhouette width for each of those clusterings, with cuts from 2-10.
+  * Plots a line graph for connectivity, Dunn, silhouette vs. number of clusters (for different clusterings)
 
 At this point, pick a particular clustering method and number of clusters
 
