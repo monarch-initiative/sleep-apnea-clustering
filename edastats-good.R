@@ -1,4 +1,4 @@
-
+#This file is deprecated
 ljoined<-left_join(df.anthro.cat, df.oxysat)
 qplot(x=Var1, y=Var2, data=melt(cor(df.anthro)), fill=value, geom="tile")
 df.select<-ljoined %>% select(bmicat, avdrop5)
