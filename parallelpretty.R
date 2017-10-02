@@ -1,3 +1,4 @@
+#This code was taken and adapted from the blog of jksakaluk. Citation and links given in README.md
 
 parallel = fa.parallel(hc$correlations,n.obs=N,
                                  #fm = 'ml',
@@ -6,7 +7,7 @@ parallel = fa.parallel(hc$correlations,n.obs=N,
                                  #SMC = TRUE,
                                  quant = .95)
 
-#Create data frame &amp;amp;amp;amp;amp;quot;obs&amp;amp;amp;amp;amp;quot; from observed eigenvalue data
+#Create data frame obs from observed eigenvalue data
 obs = data.frame(parallel$fa.values)
 obs$type = c('Observed Data')
 obs$num = c(row.names(obs))
@@ -21,7 +22,7 @@ max = as.numeric(nrow(obs))
 max = 4*max
 percentile1 = percentile[min:max]
 
-#Create data frame called &amp;amp;amp;amp;amp;quot;sim&amp;amp;amp;amp;amp;quot; with simulated eigenvalue data
+#Create data frame called sim with simulated eigenvalue data
 sim = data.frame(parallel$fa.sim)
 sim$type = c('Simulated Data (95th %ile)')
 sim$num = c(row.names(obs))
@@ -51,7 +52,7 @@ p = ggplot(eigendat, aes(x=num, y=eigenvalue, shape=type)) +
   #Label the y-axis 'Eigenvalue'
   scale_y_continuous(name='Eigenvalue')+
   #Label the x-axis 'Factor Number', and ensure that it ranges from 1-max # of factors, increasing by one with each 'tick' mark.
-  scale_x_continuous(name='Factor Number', breaks=seq(0, max(eigendat$num), by=2))+
+  scale_x_continuous(name='Factor Number', breaks=seq(0, max(eigendat$num, na.rm=TRUE), by=5))+
   #Manually specify the different shapes to use for actual and simulated data, in this case, white and black circles.
   scale_shape_manual(values=c(16,1)) +
   #Add vertical line indicating parallel analysis suggested max # of factors to retain
@@ -62,11 +63,4 @@ p = ggplot(eigendat, aes(x=num, y=eigenvalue, shape=type)) +
 p
 
 ggsave('parallel.png', width=6, height=6, unit='in', dpi=300)
-
-db=dbscan(gower_dist, eps = 0.15, MinPts = 5, method="dist")
-
-# Plot DBSCAN results
-plot(db, gower_dist, main = "DBSCAN", frame = FALSE)
-
-kNNdistplot(df, k =  5)
 
