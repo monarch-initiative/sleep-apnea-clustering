@@ -21,8 +21,10 @@ Currently, these scripts are intended to be run in a certain order. We are worki
   
 At this point, one would go back and select only the columns they want in df (that is, the important factors).
   
-#### 3a. prettyparallel
+#### 3a. parallelpretty
   Function for plotting scree plot/parallel analysis in a nice, publication-worthy way.
+  Code taken from https://sakaluk.wordpress.com/2016/05/26/11-make-it-pretty-scree-plots-and-parallel-analysis-using-psych-and-ggplot2/
+    Sakaluk, J. K., & Short, S. D. (2016). A Methodological Review of Exploratory Factor Analysis in Sexuality Research: Used Practices,  Best Practices, and Data Analysis Resources. Journal of Sex Research.
   
 ### 4. calcGowerMat
   Calculates Gower distance matrix for hc.
