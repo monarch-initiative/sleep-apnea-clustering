@@ -23,8 +23,10 @@ At this point, one would go back and select only the columns they want in df (th
   
 #### 3a. parallelpretty
   Function for plotting scree plot/parallel analysis in a nice, publication-worthy way.
+  
   Code taken from https://sakaluk.wordpress.com/2016/05/26/11-make-it-pretty-scree-plots-and-parallel-analysis-using-psych-and-ggplot2/
-    Sakaluk, J. K., & Short, S. D. (2016). A Methodological Review of Exploratory Factor Analysis in Sexuality Research: Used Practices,  Best Practices, and Data Analysis Resources. Journal of Sex Research.
+  
+  Sakaluk, J. K., & Short, S. D. (2016). [A Methodological Review of Exploratory Factor Analysis in Sexuality Research: Used Practices,  Best Practices, and Data Analysis Resources. Journal of Sex Research.](http://www.tandfonline.com/doi/abs/10.1080/00224499.2015.1137538)
   
 ### 4. calcGowerMat
   Calculates Gower distance matrix for hc.
