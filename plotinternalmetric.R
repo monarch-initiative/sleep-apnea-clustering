@@ -73,28 +73,7 @@ silh<-as.data.frame(cbind(avgsil.h, avgsil.ha,  avgsil.hs,
 colnames(silh)<-c("complete", "average",  "single",
                   "pam", "diana")
 
-num_clust<-c(1:10)
-tableau<- cbind(num_clust, silh)
-table_long <- tableau %>%
-  gather(clustering, value, -num_clust) # convert to long format
-
-ggplot(data=table_long,
-       aes(x=num_clust, y=value, colour=clustering)) +
-  geom_line() +
-  scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10), labels=c(1,2,3,4,5,6,7,8,9,10)) +
-  ggtitle("Comparison of different cluster methods - Silhouette width") +
-  xlab("Number of clusters") +
-  ylab("avg silhouette width") +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank())
-
-ggplot(data=table_long,
-       aes(x=num_clust, y=value, colour=clustering)) +
-  geom_line() +
-  scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10), labels=c(1,2,3,4,5,6,7,8,9,10)) +
-  ggtitle("Comparison of different cluster methods - Dunn index") +
-  xlab("Number of clusters") +
-  ylab("Dunn index") +
-  theme_bw() +
-  theme(panel.grid.minor = element_blank())
+plotMetric(conn)
+plotMetric(dunn.index)
+plotMetric(silh)
 
