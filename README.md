@@ -37,9 +37,6 @@ At this point, one would go back and select only the columns they want in df (th
   * Plots a line graph for connectivity, Dunn, silhouette vs. number of clusters (for different clusterings)
 
 At this point, pick a particular clustering method and number of clusters
-
-### 6. modelstat
-  Perform ANOVA and chi squared tests for clusters.
   
 
   
