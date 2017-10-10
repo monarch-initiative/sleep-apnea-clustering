@@ -35,6 +35,8 @@ At this point, one would go back and select only the columns they want in df (th
   * Calculates clusterings for hclust (many linkage method options), diana, and pam.
   * Calculates connectivity, Dunn index, silhouette width for each of those clusterings, with cuts from 2-10.
   * Plots a line graph for connectivity, Dunn, silhouette vs. number of clusters (for different clusterings)
+  
+Ideas and concepts of comparing clustering solutions came from: [A consensus framework for clustering microarray data. Ted Laderas and Shannon McWeeney. OMICS: A Journal of Integrative Biology. 2007. 116-128.](https://doi-org/10.1089/omi.2006.0008)
 
 At this point, pick a particular clustering method and number of clusters
   
