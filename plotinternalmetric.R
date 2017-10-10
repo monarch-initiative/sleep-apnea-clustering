@@ -1,3 +1,7 @@
+
+#Ideas and concepts for comparing clusterings were taken from Laderas' CONSENSE package.
+#Please see https://zenodo.org/record/17304#.WdwSqq2ZPEo or https://github.com/laderast/Consense/tree/v.1.0
+
 library(clValid)
 
 source("lib/getAvgSil.R")
